@@ -1,0 +1,29 @@
+name: Build Artifact
+
+on: 
+
+  push:
+    branches:
+      - release/dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: pe-auth:latest
+
+      - name: Extract built artifact
+        run: docker run --rm -v "$(pwd)":/workdir pe-auth:latest tar czf /workdir/artifact.tar.gz src/dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: peauth-artifact
+          path: artifact.tar.gz
