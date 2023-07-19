@@ -3,6 +3,7 @@ import { mainAppErrorHandler } from "../../utils/error/errorDefiner";
 import { HTTP } from "../../utils/constants/HTTP";
 import { CourseEntity } from "../../model/AdminEntity/courseEntity";
 import { UserEntity } from "../../model/AdminEntity/UserEntity";
+import { SchoolEntity } from "../../model/AdminEntity/SchoolEntity";
 
 export const createCourse = async (
   req: Request,
@@ -12,7 +13,7 @@ export const createCourse = async (
     const { schoolID } = req.params;
     const { courseName, courseCode, courseUnit, level, semester } = req.body;
 
-    const getSchool = await UserEntity.findOne({
+    const getSchool = await SchoolEntity.findOne({
       where: { id: schoolID },
       relations: ["course"],
     });
@@ -54,7 +55,7 @@ export const readCourses = async (
   try {
     const { schoolID } = req.params;
 
-    const getSchool = await UserEntity.findOne({
+    const getSchool = await SchoolEntity.findOne({
       where: { id: schoolID },
       relations: ["course"],
     });

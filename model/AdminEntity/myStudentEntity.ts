@@ -3,21 +3,17 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToMany,
-  PrimaryColumn,
   JoinColumn,
-  OneToOne,
   ManyToOne,
-  ManyToMany,
+  OneToMany,
 } from "typeorm";
 import "reflect-metadata";
-import { UserEntity } from "./UserEntity";
-import { CourseEntity } from "./courseEntity";
-import { RegisterEntity } from "../studentConcern/registerCourse";
 import { SchoolEntity } from "./SchoolEntity";
+import { RegisterEntity } from "../studentConcern/registerCourse";
+import { RegisterCourseEntity } from "./registerCourse";
 
-@Entity("studentEntities")
-export class studentEntity extends BaseEntity {
+@Entity("myStudentEntities")
+export class myStudentEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string | number | null;
 
@@ -52,19 +48,11 @@ export class studentEntity extends BaseEntity {
   @Column()
   verified: boolean;
 
-  // @ManyToOne(() => SchoolEntity, (school) => school.student)
-  // @JoinColumn()
-  // school: SchoolEntity;
-
-  // @ManyToMany(() => UserEntity, (course) => course.student)
-  // @JoinColumn()
-  // course: UserEntity[];
+  @ManyToOne(() => SchoolEntity, (el) => el.student)
+  @JoinColumn()
+  school: SchoolEntity;
 
   @OneToMany(() => RegisterEntity, (el) => el.register)
   @JoinColumn()
   register: RegisterEntity[];
-
-  @ManyToOne(() => SchoolEntity, (el) => el.student)
-  @JoinColumn()
-  school: SchoolEntity;
 }

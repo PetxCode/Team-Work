@@ -13,6 +13,8 @@ import {
 import "reflect-metadata";
 import { studentEntity } from "./studentEntity";
 import { UserEntity } from "./UserEntity";
+import { SchoolEntity } from "./SchoolEntity";
+import { StaffEntity } from "../staff/staffEntity";
 // import { AssignRoleEntity } from "./AssignRoleEntity";
 
 @Entity("CourseEntities")
@@ -42,9 +44,13 @@ export class CourseEntity extends BaseEntity {
   @CreateDateColumn({ type: "timestamptz" })
   createdAt: Date;
 
-  @ManyToOne(() => UserEntity, (school) => school.course)
+  @ManyToOne(() => SchoolEntity, (school) => school.course)
   @JoinColumn()
-  course: UserEntity;
+  course: SchoolEntity;
+
+  @ManyToOne(() => StaffEntity, (el) => el.course)
+  @JoinColumn()
+  staff: StaffEntity;
 
   // Course Registered
 }

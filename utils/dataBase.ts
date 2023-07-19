@@ -6,8 +6,15 @@ import { AssignRoleEntity } from "../model/AdminEntity/AssignRoleEntity";
 import { studentEntity } from "../model/AdminEntity/studentEntity";
 import { CourseEntity } from "../model/AdminEntity/courseEntity";
 import { LevelEntity } from "../model/studentConcern/LevelEntity";
-import { RegisterEntity } from "../model/studentConcern/registerCourse";
 import { EnterCourseEntity } from "../model/studentConcern/enterCourseEntityModel";
+import { OrganisationEntity } from "../model/AdminEntity/OrganisationEntity";
+import { SchoolEntity } from "../model/AdminEntity/SchoolEntity";
+import { myStudentEntity } from "../model/AdminEntity/myStudentEntity";
+import { CreateLevelEntity } from "../model/AdminEntity/CreateLevelEntity";
+import { RegisterCourseEntity } from "../model/AdminEntity/registerCourse";
+import { RegisterEntity } from "../model/studentConcern/registerCourse";
+import { StaffEntity } from "../model/staff/staffEntity";
+
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -18,16 +25,36 @@ export const AppDataSource = new DataSource({
   database: "postgres",
   synchronize: true,
   logging: false,
+
   entities: [
     UserEntity,
     OfficeEntity,
     AssignRoleEntity,
     LevelEntity,
-    studentEntity,
     CourseEntity,
+    // RegisterCourseEntity,
     RegisterEntity,
+StaffEntity,
     EnterCourseEntity,
+
+    CreateLevelEntity,
+    OrganisationEntity,
+    SchoolEntity,
+    myStudentEntity,
   ],
 });
 
+// new Client({
+//   types: ,
+//   host: "localhost",
+//   port: 5432,
+//   username: "postgres",
+//   password: "Petxcanadi@2020",
+//   database: "office",
+//   synchronize: true,
+//   logging: false,
+// });
+
+
+// vzBxFhBF6vu8Cqyy28pRNw;
 

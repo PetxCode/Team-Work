@@ -6,6 +6,7 @@ import { mainAppErrorHandler } from "../../utils/error/errorDefiner";
 import { studentEntity } from "../../model/AdminEntity/studentEntity";
 import { RegisterEntity } from "../../model/studentConcern/registerCourse";
 import { LevelEntity } from "../../model/studentConcern/LevelEntity";
+import { myStudentEntity } from "../../model/AdminEntity/myStudentEntity";
 
 export const registerCourse = async (
   req: Request,
@@ -15,7 +16,7 @@ export const registerCourse = async (
     const { studentID } = req.params;
     const { registerTitle } = req.body;
 
-    const getStudent = await studentEntity.findOne({
+    const getStudent = await myStudentEntity.findOne({
       where: { id: studentID },
       relations: ["register"],
     });
@@ -23,10 +24,6 @@ export const registerCourse = async (
     const findLevel = await LevelEntity.findOne({
       where: { levelTitle: registerTitle },
     });
-
-    // const findStudent = await studentEntity.findOne({
-    //   where: { id: studentID },
-    // });
 
     if (!findLevel) {
       return res.status(HTTP.BAD_REQUEST).json({

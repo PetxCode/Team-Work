@@ -11,11 +11,11 @@ import {
 } from "typeorm";
 import "reflect-metadata";
 import { studentEntity } from "../AdminEntity/studentEntity";
-import { EnterCourseEntity } from "./enterCourseEntityModel";
-import { myStudentEntity } from "../AdminEntity/myStudentEntity";
+import { EnterCourseEntity } from "../studentConcern/enterCourseEntityModel";
+import { myStudentEntity } from "./myStudentEntity";
 
-@Entity("RegisterEntities")
-export class RegisterEntity extends BaseEntity {
+@Entity("RegisterCourseEntities")
+export class RegisterCourseEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string | number;
 
@@ -29,7 +29,7 @@ export class RegisterEntity extends BaseEntity {
   @JoinColumn()
   register: myStudentEntity;
 
-  @OneToMany(() => EnterCourseEntity, (el) => el.course)
-  @JoinColumn()
-  course: EnterCourseEntity[];
+  //   @OneToMany(() => EnterCourseEntity, (el) => el.course)
+  //   @JoinColumn()
+  //   course: EnterCourseEntity[];
 }

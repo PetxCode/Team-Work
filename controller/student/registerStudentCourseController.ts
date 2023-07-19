@@ -8,6 +8,8 @@ import { EnterCourseEntity } from "../../model/studentConcern/enterCourseEntityM
 import { RegisterEntity } from "../../model/studentConcern/registerCourse";
 import { UserEntity } from "../../model/AdminEntity/UserEntity";
 import { CourseEntity } from "../../model/AdminEntity/courseEntity";
+import { SchoolEntity } from "../../model/AdminEntity/SchoolEntity";
+import { myStudentEntity } from "../../model/AdminEntity/myStudentEntity";
 
 export const registerStudentCourse = async (
   req: Request,
@@ -17,19 +19,26 @@ export const registerStudentCourse = async (
     const { registerID, studentID } = req.params;
     const { courseCode } = req.body;
 
-    const getStudent = await studentEntity.findOne({
+    const getStudent = await myStudentEntity.findOne({
       where: { id: studentID },
     });
 
-    const getSchool = await UserEntity.findOne({
-      where: { userName: getStudent.schoolName },
+    const getSchool = await SchoolEntity.findOne({
+      where: { title: getStudent.schoolName },
+    });
+
+    const getSchoolCourse = await SchoolEntity.findOne({
+      where: { id: getSchool.id },
       relations: ["course"],
     }).then((res) => {
-      // console.log(res.course.length);
+      console.log(getSchool);
+
       return res.course.find((el) => el.courseCode === courseCode);
     });
 
-    if (!getSchool) {
+    // getSchoolCourse.course.find((el) => el.courseCode === courseCode);
+
+    if (!getSchoolCourse) {
       return res.status(HTTP.BAD_REQUEST).json({
         message: `This Course Code ${courseCode} isn't correct `,
       });
@@ -41,11 +50,11 @@ export const registerStudentCourse = async (
     });
 
     const registerMyCourse = await EnterCourseEntity.create({
-      courseCode: getSchool?.courseCode,
-      courseUnit: getSchool?.courseUnit,
-      courseName: getSchool?.courseName,
-      semester: getSchool?.semester,
-      level: getSchool?.level,
+      courseCode: getSchoolCourse?.courseCode,
+      courseUnit: getSchoolCourse?.courseUnit,
+      courseName: getSchoolCourse?.courseName,
+      semester: getSchoolCourse?.semester,
+      level: getSchoolCourse?.level,
     }).save();
 
     getCourse.course = [...getCourse.course, registerMyCourse];
@@ -53,7 +62,8 @@ export const registerStudentCourse = async (
 
     return res.status(HTTP.OK).json({
       message: "course successfully created",
-      // data: registerMyCourse,
+      data: registerMyCourse,
+      // data: { getSchoolCourse, getSchool, getStudent },
     });
   } catch (err) {
     new mainAppErrorHandler({
@@ -65,7 +75,7 @@ export const registerStudentCourse = async (
 
     return res.status(HTTP.BAD_REQUEST).json({
       message: "Error Found",
-      data: err,
+      data: err.message,
     });
   }
 };
@@ -79,7 +89,7 @@ export const viewStudentCourse = async (
 
     const getCourse = await RegisterEntity.findOne({
       where: { id: registerID },
-      relations: ["course", "register"],
+      relations: ["course"],
     });
 
     return res.status(HTTP.OK).json({
@@ -108,13 +118,19 @@ export const deleteStudentCourse = async (
   try {
     const { studentID, registerID } = req.params;
 
-    const getStudent = await studentEntity.delete({
-      id: studentID,
+    // const getStudent = await studentEntity.delete({
+    //   id: studentID,
+    // });
+
+    const getCourse = await EnterCourseEntity.findOne({
+      where: { id: registerID },
     });
 
-    const getCourse = await EnterCourseEntity.delete({
-      id: registerID,
-    });
+    // const getCourse = await EnterCourseEntity.findOne({
+    //   where: { id: registerID },
+    // });
+
+    console.log(getCourse);
 
     return res.status(HTTP.OK).json({
       message: "deleting student course successfully",

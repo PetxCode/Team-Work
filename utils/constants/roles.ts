@@ -4,6 +4,7 @@ export const mainRoles = {
     Hod: "HOD",
     student: "STUDENT",
     moderator: "MODERATOR",
+    lecturer: "LECTURER",
     editor: "EDITOR",
     courseAdviser: "COURSE_ADVISER",
   },

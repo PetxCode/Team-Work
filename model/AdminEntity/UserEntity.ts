@@ -14,6 +14,8 @@ import { studentEntity } from "./studentEntity";
 import { CourseEntity } from "./courseEntity";
 import { RegisterEntity } from "../studentConcern/registerCourse";
 import { LevelEntity } from "../studentConcern/LevelEntity";
+import { OrganisationEntity } from "./OrganisationEntity";
+import { SchoolEntity } from "./SchoolEntity";
 // import { AssignRoleEntity } from "./AssignRoleEntity";
 
 @Entity("UserEntities")
@@ -22,7 +24,7 @@ export class UserEntity extends BaseEntity {
   id: string | number;
 
   @Column({
-    unique: true,
+    // unique: true,
     nullable: true,
   })
   userName: string;
@@ -44,19 +46,29 @@ export class UserEntity extends BaseEntity {
   @Column()
   verified: boolean;
 
-  @OneToOne(() => OfficeEntity, (role) => role.user)
-  @JoinColumn()
-  office: OfficeEntity;
+  // @OneToOne(() => OfficeEntity, (role) => role.user)
+  // @JoinColumn()
+  // office: OfficeEntity;
 
-  @OneToMany(() => studentEntity, (el) => el.school, { cascade: true })
-  @JoinColumn()
-  student: studentEntity[];
+  // @OneToMany(() => studentEntity, (el) => el.mySchool, { cascade: true })
+  // @JoinColumn()
+  // student: studentEntity[];
 
-  @OneToMany(() => CourseEntity, (el) => el.course, { cascade: true })
-  @JoinColumn()
-  course: CourseEntity[];
+  // @OneToMany(() => CourseEntity, (el) => el.course, { cascade: true })
+  // @JoinColumn()
+  // course: CourseEntity[];
 
-  @OneToMany(() => LevelEntity, (el) => el.schoolLevels, { cascade: true })
+  // @OneToMany(() => LevelEntity, (el) => el.schoolLevels, { cascade: true })
+  // @JoinColumn()
+  // schoolLevels: LevelEntity[];
+
+  // @OneToMany(() => OrganisationEntity, (el) => el.user, {
+  //   cascade: true,
+  // })
+  // @JoinColumn()
+  // organisation: OrganisationEntity[];
+
+  @OneToMany(() => SchoolEntity, (el) => el.user, { cascade: true })
   @JoinColumn()
-  schoolLevels: LevelEntity[];
+  mySchool: SchoolEntity[];
 }

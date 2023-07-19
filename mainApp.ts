@@ -9,9 +9,14 @@ import passport from "passport";
 import social from "./routers/oAuthRoute";
 import role from "./routers/roleRouter";
 import level from "./routers/levelRouter";
+
+import organisation from "./routers/organisationRouter";
+import school from "./routers/schoolRouter";
+
 import student from "./routers/studentRegistrationRouter";
 import course from "./routers/student/courseRoute";
 import register from "./routers/student/registerCourseRouter";
+import staff from "./routers/staff/staffRouter";
 
 import myRegister from "./routers/student/createCourseRouter";
 
@@ -45,13 +50,20 @@ export const mainApp = (app: Application) => {
     .use(passport.session())
 
     // custom auth
-    .use("/api/user", user)
     .use("/api/role", role)
+
+    .use("/api/user", user)
     .use("/api/level", level)
     .use("/api/student", student)
     .use("/api/course", course)
+    .use("/api/staff", staff)
+
     .use("/api/register-course", register)
     .use("/api/my-register", myRegister)
+
+    .use("/api/organisation", organisation)
+
+    .use("/api/school", school)
 
     //oAuth with google
     .use("/", social)

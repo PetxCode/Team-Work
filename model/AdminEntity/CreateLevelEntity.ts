@@ -10,8 +10,8 @@ import {
 import "reflect-metadata";
 import { SchoolEntity } from "../AdminEntity/SchoolEntity";
 
-@Entity("LevelEntities")
-export class LevelEntity extends BaseEntity {
+@Entity("CreateLevelEntities")
+export class CreateLevelEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string | number;
 

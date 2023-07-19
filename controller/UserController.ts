@@ -45,7 +45,7 @@ export const getOneUser = async (
       where: {
         id,
       },
-      relations: ["student", "course", "schoolLevels"],
+      relations: ["mySchool"],
     });
     return res.status(HTTP.OK).json({
       message: "Viewing school detail",

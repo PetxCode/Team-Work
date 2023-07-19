@@ -3,6 +3,8 @@ import { mainAppErrorHandler } from "../utils/error/errorDefiner";
 import { HTTP } from "../utils/constants/HTTP";
 import { studentEntity } from "../model/AdminEntity/studentEntity";
 import { UserEntity } from "../model/AdminEntity/UserEntity";
+import { SchoolEntity } from "../model/AdminEntity/SchoolEntity";
+import { myStudentEntity } from "../model/AdminEntity/myStudentEntity";
 
 export const registerStudent = async (
   req: Request,
@@ -12,19 +14,19 @@ export const registerStudent = async (
     const { schoolID } = req.params;
     const { fullName, email, password } = req.body;
 
-    const getSchool = await UserEntity.findOne({
+    const getSchool = await SchoolEntity.findOne({
       where: {
         id: schoolID,
       },
       relations: ["student"],
     });
 
-    const createdStudent = await studentEntity
+    const createdStudent = await myStudentEntity
       .create({
         fullName,
         email,
         password,
-        schoolName: getSchool?.userName,
+        schoolName: getSchool?.title,
         status: "student",
         level: "100Level",
         verified: true,
@@ -54,21 +56,47 @@ export const registerStudent = async (
   }
 };
 
-export const readStudent = async (
+export const readStudentsFromSchool = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
   try {
-    const { id } = req.params;
-    const getStudent = await studentEntity.findOne({
+    const { schoolID } = req.params;
+    const getStudent = await SchoolEntity.findOne({
       where: {
-        id,
+        id: schoolID,
       },
-      relations: ["register"],
+      relations: ["student"],
     });
 
     return res.status(HTTP.OK).json({
       message: "reading student successfully!",
+      data: getStudent,
+    });
+  } catch (err) {
+    new mainAppErrorHandler({
+      message: `Unable to read level`,
+      status: HTTP.BAD_REQUEST,
+      name: "Student creation Error",
+      isSuccess: false,
+    });
+
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: "Error Found Again",
+      data: err.message,
+    });
+  }
+};
+
+export const readStudents = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
+  try {
+    const getStudent = await myStudentEntity.find();
+
+    return res.status(HTTP.OK).json({
+      message: "reading students successfully!",
       data: getStudent,
     });
   } catch (err) {
@@ -86,12 +114,16 @@ export const readStudent = async (
   }
 };
 
-export const readStudents = async (
+export const readOneStudents = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
   try {
-    const getStudent = await studentEntity.find();
+    const { id } = req.params;
+    const getStudent = await myStudentEntity.findOne({
+      where: { id },
+      relations: ["register"],
+    });
 
     return res.status(HTTP.OK).json({
       message: "reading students successfully!",

@@ -3,6 +3,7 @@ import { mainAppErrorHandler } from "../../utils/error/errorDefiner";
 import { HTTP } from "../../utils/constants/HTTP";
 import { LevelEntity } from "../../model/studentConcern/LevelEntity";
 import { UserEntity } from "../../model/AdminEntity/UserEntity";
+import { SchoolEntity } from "../../model/AdminEntity/SchoolEntity";
 
 export const createLevel = async (
   req: Request,
@@ -12,7 +13,7 @@ export const createLevel = async (
     const { levelTitle } = req.body;
     const { schoolID } = req.params;
 
-    const getSchool = await UserEntity.findOne({
+    const getSchool = await SchoolEntity.findOne({
       where: { id: schoolID },
       relations: ["schoolLevels"],
     });
@@ -53,7 +54,7 @@ export const readLevel = async (
 ): Promise<Response> => {
   try {
     const { schoolID } = req.params;
-    const getLevel = await UserEntity.findOne({
+    const getLevel = await SchoolEntity.findOne({
       where: { id: schoolID },
       relations: ["schoolLevels"],
     });
@@ -90,6 +91,7 @@ export const updateLevel = async (
     });
 
     const updateLevelInfo = LevelEntity.merge(getLevel, { levelTitle });
+    updateLevelInfo.save();
 
     return res.status(HTTP.OK).json({
       message: "level updated successfully!",
@@ -115,14 +117,14 @@ export const deleteLevel = async (
   res: Response,
 ): Promise<Response> => {
   try {
-    const { id } = req.params;
+    const { schoolID, id } = req.params;
 
-    const getLevel = await LevelEntity.delete({
+    const getLevel: any = await LevelEntity.delete({
       id,
     });
 
     return res.status(HTTP.OK).json({
-      message: "level deleted successfully!",
+      message: "level deleted successfully!!!",
       data: getLevel,
     });
   } catch (err) {
